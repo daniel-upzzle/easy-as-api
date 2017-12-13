@@ -276,7 +276,7 @@ add_action( 'rest_api_init', function () {
 	$post_types = get_post_types(
 						array(
 							'public'   => true,
-							'_builtin' => true
+							'_builtin' => false
 						), 
 						'objects' 
 					);
