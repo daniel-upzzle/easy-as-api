@@ -2,6 +2,8 @@
 
 /*
 Plugin Name: Easy As API
+
+Authors: daniel-upzzle freecatesd
 */
 
 
