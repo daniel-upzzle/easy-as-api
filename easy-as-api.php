@@ -17,8 +17,10 @@ function getCollection($args, $filter_response_fields = NULL){
 
 			$post = get_fields();
 			$post["ID"] = get_the_ID();
-			$post["name"] = html_entity_decode(get_the_title());
-			$post["large_text"] = get_the_content();
+			$post["title"] = html_entity_decode(get_the_title());
+			$post["content"] = get_the_content();
+			$post["date"] = get_the_date();
+			$post["max_num_pages"] = $the_query->max_num_pages;
 
             if(isset($filter_response_fields)){
                 $post = $filter_response_fields($post);
@@ -46,8 +48,9 @@ function getElement($args, $filter_response_fields = NULL){
 		$the_query->the_post();
 
 		$post = get_fields();
-		$post["name"] = html_entity_decode(get_the_title());
-		$post["large_text"] = get_the_content();
+		$post["ID"] = get_the_ID();
+		$post["title"] = html_entity_decode(get_the_title());
+		$post["content"] = get_the_content();
 
 		if(isset($filter_response_fields)){
 			$post = $filter_response_fields($post);
@@ -107,6 +110,8 @@ function getCollectionRESTResponse(WP_REST_Request $request, $filter_args = NULL
         'orderby'       => $orderby,
 	);
 
+	
+
     $args = array_merge($args, $constructMetaQueryFunc( $request->get_params() ));
 
 	//return new WP_REST_Response( $args );
@@ -154,6 +159,20 @@ function getElementByTypeAndSlug($type,$slug){
 
 }
 
+
+function getCollectionByType($type,$page = NULL, $posts_per_page = 3){
+	
+	if($page==NULL || $page==0){
+		$posts_per_page = -1;
+		$page = 1;
+	}
+
+	return getCollection(array(
+		'post_type'			=> $type,
+		'posts_per_page'	=> $posts_per_page,
+		'paged'				=> $page
+	));
+}
 
 function getElementRESTResponse(WP_REST_Request $request, $filter_args = NULL, $filter_response_fields = NULL ){
 
