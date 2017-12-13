@@ -9,6 +9,7 @@ Authors: daniel-upzzle freecates
 
 function getCollection($args, $filter_response_fields = NULL){
 
+
 	$posts = array();
 	$the_query = new WP_Query( $args );
 
@@ -70,7 +71,7 @@ function constructMetaQuery($params){
 	$meta_query['relation'] = 'AND';
 	foreach($params as $param_name => $param_value){
 
-        if($param_name!="sim-model"){
+        if($param_name!="sim-model" && $param_name!="page" && $param_name!="pagesize"){
 
             $meta_query[$param_name_."_clause"] = array(
                 'key'		=> $param_name,
@@ -101,16 +102,27 @@ function getCollectionRESTResponse(WP_REST_Request $request, $filter_args = NULL
 
     list($meta_key,$orderby) = $constructOrderByFunc( $request->get_params() );
 
+	$pagenum = $request->get_param("page");
+	if($pagenum!=null){
+		$pagesize = $request->get_param("pagesize");
+		$posts_per_page = ($pagesize!=null) ? $pagesize : 10;
+	}else{
+		$posts_per_page = -1;
+		$pagenum = 1;
+	}
+	
+
 	$args = array(
 		'post_type'		=> $type,
-		'numberposts'	=> -1,
-        'posts_per_page' => -1,
+		//'numberposts'	=> -1,
+//        'posts_per_page' => -1,
 		//'meta_query'	=> $constructMetaQueryFunc( $request->get_params() ),
         'meta_key'      => $meta_key,
-        'orderby'       => $orderby,
+		'orderby'       => $orderby,
+		'posts_per_page'	=> "".$posts_per_page,
+		'paged'				=> $pagenum
 	);
 
-	
 
     $args = array_merge($args, $constructMetaQueryFunc( $request->get_params() ));
 
