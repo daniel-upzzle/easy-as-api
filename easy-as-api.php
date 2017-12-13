@@ -3,7 +3,7 @@
 /*
 Plugin Name: Easy As API
 
-Authors: daniel-upzzle freecatesd
+Authors: daniel-upzzle freecates
 */
 
 
@@ -245,7 +245,7 @@ add_action( 'rest_api_init', function () {
 	$post_types = get_post_types(
 						array(
 							'public'   => true,
-							'_builtin' => false
+							'_builtin' => true
 						), 
 						'objects' 
 					);
